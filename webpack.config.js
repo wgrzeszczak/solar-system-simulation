@@ -3,7 +3,10 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        bundle: './src/index.js',
+        links: './links/links.js'
+    },
     devtool: 'inline-source-map',
     devServer: {
         contentBase: './dist'
@@ -16,7 +19,7 @@ module.exports = {
         })
     ],
     output: {
-        filename: 'bundle.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
     },
     mode: 'development',

@@ -1,0 +1,16 @@
+.links {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;    
+}
+
+.links .link {
+    width: 16px;
+    height: 16px;
+}
+
+.links .link.github {
+    display: inline-block;
+    background-image: url("github.png");
+    background-size: cover;
+}

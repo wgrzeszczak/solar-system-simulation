@@ -110,14 +110,14 @@ export default class App {
         .withLabel("Moon")
         .withImage(MoonImage)
         .withMass(7.349e22)
-        .withRadius(1700)
+        .withRadius(1737.1)
         .withAngularVelocity(1)
         .withParent(this.objects.earth)
         .withOrbitalParameters({
             semiMajorAxis: 384399,
             eccentricity: 0.0549,
-            meanAnomaly: 40.7,
-            period: 60 * 60 * 24
+            meanAnomaly: 184.5,
+            period: 27.321661 * 60 * 60 * 24
         })
         .build();
         this.physics.addUpdateable(this.objects.moon);
