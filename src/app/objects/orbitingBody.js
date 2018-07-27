@@ -17,16 +17,16 @@ export default class OrbitingBody extends Body {
     }
 
     onRender(context, properties) {
-        this.visibleOrbitPredictionPoints = this.calculateVisibleOrbitPredictionPoints(properties);
+        this.calculateVisibleOrbitPredictionPoints(properties);
         this.renderOrbitPrediction(context, properties);
         super.onRender(context, properties);
     }
 
     onUpdate(timeStep, totalElapsedTime) {
+        super.onUpdate(timeStep, totalElapsedTime);
         const stateVectors = this.getStateVectors(totalElapsedTime);
         this.position = stateVectors.position;
         this.velocity = stateVectors.velocity;
-        this.rotation = (this.rotation + this.angularVelocity * timeStep) % 360;
     }
 
     calculateVisibleOrbitPredictionPoints(properties) {      
@@ -44,9 +44,11 @@ export default class OrbitingBody extends Body {
 
                 if(index + 1 == this.orbitPrediction.length) {
                     visibleOrbitPredictionPoints.push(0);
-                } else if(lastOutOfBoundsPointIndex) {
+                } 
+                else if(lastOutOfBoundsPointIndex) {
                     visibleOrbitPredictionPoints.push(lastOutOfBoundsPointIndex);
                 }
+
                 foundFirstOutOfBoundsPoint = false;
                 lastOutOfBoundsPointIndex = null;
             }
@@ -58,7 +60,7 @@ export default class OrbitingBody extends Body {
                 lastOutOfBoundsPointIndex = index;
             }
         });
-        return visibleOrbitPredictionPoints;
+        this.visibleOrbitPredictionPoints = visibleOrbitPredictionPoints;
     }
 
     getStateVectors(totalElapsedTime) {
@@ -111,14 +113,13 @@ export default class OrbitingBody extends Body {
             context.beginPath();
             context.strokeStyle = properties.defaultStrokeStyle;
             this.visibleOrbitPredictionPoints.forEach((visibleIndex) => {
-                const sourcePoint = this.orbitPrediction[visibleIndex];
-                context.moveTo(
-                    parentAbsolutePosition.x + sourcePoint.x * properties.scale, 
-                    parentAbsolutePosition.y + sourcePoint.y * properties.scale
-                );
-
                 if(this.visibleOrbitPredictionPoints.includes((visibleIndex + 1) % this.orbitPrediction.length)) {                   
+                    const sourcePoint = this.orbitPrediction[visibleIndex];
                     const targetPoint = this.orbitPrediction[(visibleIndex + 1) % this.orbitPrediction.length];
+                    context.moveTo(
+                        parentAbsolutePosition.x + sourcePoint.x * properties.scale, 
+                        parentAbsolutePosition.y + sourcePoint.y * properties.scale
+                    );
                     context.lineTo(parentAbsolutePosition.x + targetPoint.x * properties.scale, parentAbsolutePosition.y + targetPoint.y * properties.scale);
                 }
             });

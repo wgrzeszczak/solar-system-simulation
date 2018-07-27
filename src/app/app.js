@@ -1,5 +1,6 @@
-import Renderer from './renderer'
+import Renderer from './renderer';
 import Physics from './physics';
+import Controller from './controller';
 
 import Vector2D from './math/vector';
 
@@ -14,7 +15,6 @@ import VenusImage from '../images/planets/venus.png';
 import EarthImage from '../images/planets/earth.png';
 import MoonImage from '../images/planets/moon.png';
 import MarsImage from '../images/planets/mars.png';
-import Controller from './controller';
 
 export default class App {
     constructor(document, view, canvas, panel) {

@@ -1,4 +1,3 @@
-import Vector2D from '../math/vector';
 import BodyBuilder from './bodyBuilder';
 import Star from '../objects/star';
 
