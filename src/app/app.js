@@ -36,7 +36,7 @@ export default class App {
         this.renderer.onResize(this.view.innerWidth, this.view.innerHeight);
         this.renderer.onMove(new Vector2D(this.view.innerWidth / 2, this.view.innerHeight / 2));
 
-        this.objects.background = new Background(BackgroundImage);
+        this.objects.background = new Background(BackgroundImage, this.document.createElement('canvas'));
         this.renderer.addRenderable(this.objects.background);
 
         this.objects.sun = new StarBuilder(this.document)

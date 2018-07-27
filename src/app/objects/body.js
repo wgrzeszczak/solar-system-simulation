@@ -3,9 +3,10 @@ import Vector2D from "../math/vector";
 export default class Body {
     constructor(label, image, imageCanvas, mass, radius, position, velocity, rotation, angularVelocity, parent) {
         this.label = label;
+        this.image = new Image();
+        this.image.src = image;
         this.imageCanvas = imageCanvas;
         this.imageCanvasContext = this.imageCanvas.getContext('2d');
-        this.image = this.prepareImage(image);
         this.mass = mass;
         this.radius = radius;
         this.position = position;
@@ -13,6 +14,11 @@ export default class Body {
         this.rotation = rotation;
         this.angularVelocity = angularVelocity;
         this.parent = parent;
+
+        this.image.addEventListener('load', () => {
+            this.imageCanvas.width = this.image.width;
+            this.imageCanvas.height = this.image.height;
+        });
     }
 
     onRender(context, properties) {
@@ -37,17 +43,6 @@ export default class Body {
             return false;
         }
         return true;
-    }
-
-    prepareImage(imageSource) {
-        const image = new Image();
-        image.src = imageSource;
-        image.addEventListener('load', () => {
-            this.imageCanvas.width = image.width;
-            this.imageCanvas.height = image.height;
-        });
-
-        return image;
     }
 
     getAbsolutePosition(properties) {

@@ -36,31 +36,30 @@ export default class OrbitingBody extends Body {
         let foundFirstOutOfBoundsPoint = false;
         let lastOutOfBoundsPointIndex = null;
 
-        const visibleOrbitPredictionPoints = [];
+        this.visibleOrbitPredictionPoints = [];
         this.orbitPrediction.forEach((point, index) => {
             point = point.multiply(properties.scale).add(parentAbsolutePosition);
             if(point.x >= minBounds.x && point.x <= maxBounds.x && point.y >= minBounds.y && point.y <= maxBounds.y) {
-                visibleOrbitPredictionPoints.push(index);
+                this.visibleOrbitPredictionPoints.push(index);
 
                 if(index + 1 == this.orbitPrediction.length) {
-                    visibleOrbitPredictionPoints.push(0);
+                    this.visibleOrbitPredictionPoints.push(0);
                 } 
                 else if(lastOutOfBoundsPointIndex) {
-                    visibleOrbitPredictionPoints.push(lastOutOfBoundsPointIndex);
+                    this.visibleOrbitPredictionPoints.push(lastOutOfBoundsPointIndex);
                 }
 
                 foundFirstOutOfBoundsPoint = false;
                 lastOutOfBoundsPointIndex = null;
             }
-            else if(!foundFirstOutOfBoundsPoint && visibleOrbitPredictionPoints.length) {
+            else if(!foundFirstOutOfBoundsPoint && this.visibleOrbitPredictionPoints.length) {
                 foundFirstOutOfBoundsPoint = true;
-                visibleOrbitPredictionPoints.push(index);
+                this.visibleOrbitPredictionPoints.push(index);
             }
             else {
                 lastOutOfBoundsPointIndex = index;
             }
         });
-        this.visibleOrbitPredictionPoints = visibleOrbitPredictionPoints;
     }
 
     getStateVectors(totalElapsedTime) {
@@ -98,7 +97,7 @@ export default class OrbitingBody extends Body {
 
     calculateOrbitPrediction() {
         this.orbitPrediction = [];
-        for (let time = 0.0; time < this.orbitalParameters.period / 2; time += this.orbitalParameters.period / (2 * 1800)) {
+        for (let time = 0.0; time < this.orbitalParameters.period / 2; time += this.orbitalParameters.period / (2 * 500)) {
             const stateVectors = this.getStateVectors(time);
             this.orbitPrediction.push(stateVectors.position);
         }
