@@ -26,7 +26,7 @@ export default class OrbitingBody extends Body {
         const stateVectors = this.getStateVectors(totalElapsedTime);
         this.position = stateVectors.position;
         this.velocity = stateVectors.velocity;
-        this.rotation += this.angularVelocity * timeStep;
+        this.rotation = (this.rotation + this.angularVelocity * timeStep) % 360;
     }
 
     calculateVisibleOrbitPredictionPoints(properties) {      
