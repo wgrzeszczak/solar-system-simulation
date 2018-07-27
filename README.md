@@ -1,4 +1,4 @@
-# SolarSystemSimulation
+# solar-system-simulation
 Simulation of the solar system based on Kepler's equation.
 
 ![Demo](https://wgrzeszczak.github.io/solar/demo.png)
