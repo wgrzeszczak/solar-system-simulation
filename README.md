@@ -1,6 +1,8 @@
 # SolarSystemSimulation
 Simulation of the solar system based on Kepler's equation.
 
+![Demo](https://wgrzeszczak.github.io/solar/demo.png)
+
 Live demo: https://wgrzeszczak.github.io/solar/
 
 ### License
