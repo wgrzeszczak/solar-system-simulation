@@ -27,7 +27,7 @@ export default class Controller {
 
         this.canvas.addEventListener('wheel', (event) => this.changeScale(event));
         this.canvas.addEventListener('mousedown', (event) => this.mouseDown(event));
-        this.canvas.addEventListener('mousemove', (event) => this.mouseMove(event), false);
+        this.canvas.addEventListener('mousemove', (event) => this.mouseMove(event));
         this.canvas.addEventListener('mouseup', (event) => this.mouseUp(event));
         this.canvas.addEventListener('mouseout', () => this.mouseOut());
 

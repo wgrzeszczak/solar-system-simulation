@@ -65,7 +65,7 @@ export default class OrbitingBody extends Body {
     getStateVectors(totalElapsedTime) {
         const e = this.orbitalParameters.eccentricity;
         const a = this.orbitalParameters.semiMajorAxis;
-        const M = (this.orbitalParameters.meanAnomaly + Math.PI * 2 * totalElapsedTime / this.orbitalParameters.period) % Math.PI * 2;
+        const M = (this.orbitalParameters.meanAnomaly + 2 * Math.PI * totalElapsedTime / this.orbitalParameters.period) % (2 * Math.PI);
 
         // Eccentric anomaly
         let E = M;
@@ -80,8 +80,8 @@ export default class OrbitingBody extends Body {
         }
 
         // True anomaly
-        const halfE = E * 0.5;
-        const v = Math.atan2(Math.sqrt(1.0 + e) * Math.sin(halfE), Math.sqrt(1.0 - e) * Math.cos(halfE)) * 2;
+        const halfE = 0.5 * E;
+        const v = 2 * Math.atan2(Math.sqrt(1.0 + e) * Math.sin(halfE), Math.sqrt(1.0 - e) * Math.cos(halfE));
 
         // Distance to central body
         const r = a * (1.0 - e * Math.cos(E));
@@ -97,7 +97,7 @@ export default class OrbitingBody extends Body {
 
     calculateOrbitPrediction() {
         this.orbitPrediction = [];
-        for (let time = 0.0; time < this.orbitalParameters.period / 2; time += this.orbitalParameters.period / (2 * 500)) {
+        for (let time = 0.0; time < this.orbitalParameters.period; time += this.orbitalParameters.period / 500) {
             const stateVectors = this.getStateVectors(time);
             this.orbitPrediction.push(stateVectors.position);
         }

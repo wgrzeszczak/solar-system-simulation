@@ -15,6 +15,11 @@ import VenusImage from '../images/planets/venus.png';
 import EarthImage from '../images/planets/earth.png';
 import MoonImage from '../images/planets/moon.png';
 import MarsImage from '../images/planets/mars.png';
+import JupiterImage from '../images/planets/jupiter.jpg';
+import SaturnImage from '../images/planets/saturn.jpg';
+import UranusImage from '../images/planets/uranus.jpg';
+import NeptuneImage from '../images/planets/neptune.jpg';
+import Constants from './math/constants';
 
 export default class App {
     constructor(document, view, canvas, panel) {
@@ -118,7 +123,7 @@ export default class App {
         this.physics.addUpdateable(this.objects.moon);
         this.renderer.addRenderable(this.objects.moon);
 
-        this.objects.earth = new OrbitingBodyBuilder(this.document)
+        this.objects.mars = new OrbitingBodyBuilder(this.document)
         .withLabel("Mars")
         .withImage(MarsImage)
         .withMass(6.4185e23)
@@ -132,8 +137,76 @@ export default class App {
             period: 686.971 * 60 * 60 * 24
         })
         .build();
-        this.physics.addUpdateable(this.objects.earth);
-        this.renderer.addRenderable(this.objects.earth);
+        this.physics.addUpdateable(this.objects.mars);
+        this.renderer.addRenderable(this.objects.mars);
+
+        this.objects.jupiter = new OrbitingBodyBuilder(this.document)
+        .withLabel("Jupiter")
+        .withImage(JupiterImage)
+        .withMass(1.8982e27)
+        .withRadius(69911)
+        .withAngularVelocity(1)
+        .withParent(this.objects.sun)
+        .withOrbitalParameters({
+            semiMajorAxis: 778.57e6,
+            eccentricity: 0.0489,
+            meanAnomaly: 20.020,
+            period: 4332.59 * 60 * 60 * 24
+        })
+        .build();
+        this.physics.addUpdateable(this.objects.jupiter);
+        this.renderer.addRenderable(this.objects.jupiter);
+
+        this.objects.saturn = new OrbitingBodyBuilder(this.document)
+        .withLabel("Saturn")
+        .withImage(SaturnImage)
+        .withMass(5.6834e26)
+        .withRadius(58232)
+        .withAngularVelocity(1)
+        .withParent(this.objects.sun)
+        .withOrbitalParameters({
+            semiMajorAxis: 1433.53e6,
+            eccentricity: 0.0565,
+            meanAnomaly: 317.020,
+            period: 10759.22 * 60 * 60 * 24
+        })
+        .build();
+        this.physics.addUpdateable(this.objects.saturn);
+        this.renderer.addRenderable(this.objects.saturn);
+     
+        this.objects.uranus = new OrbitingBodyBuilder(this.document)
+        .withLabel("Uranus")
+        .withImage(UranusImage)
+        .withMass(8.681e25)
+        .withRadius(25362)
+        .withAngularVelocity(1)
+        .withParent(this.objects.sun)
+        .withOrbitalParameters({
+            semiMajorAxis: 19.2184 * Constants.AU,
+            eccentricity: 0.046381,
+            meanAnomaly: 142.2386,
+            period: 30688.5 * 60 * 60 * 24
+        })
+        .build();
+        this.physics.addUpdateable(this.objects.uranus);
+        this.renderer.addRenderable(this.objects.uranus);
+
+        this.objects.neptune = new OrbitingBodyBuilder(this.document)
+        .withLabel("Neptune")
+        .withImage(NeptuneImage)
+        .withMass(1.0243e26)
+        .withRadius(24622)
+        .withAngularVelocity(1)
+        .withParent(this.objects.sun)
+        .withOrbitalParameters({
+            semiMajorAxis: 30.11 * Constants.AU,
+            eccentricity: 0.009456,
+            meanAnomaly: 256.228,
+            period: 60182 * 60 * 60 * 24
+        })
+        .build();
+        this.physics.addUpdateable(this.objects.neptune);
+        this.renderer.addRenderable(this.objects.neptune);
     }
 
     update(timeStep) {
