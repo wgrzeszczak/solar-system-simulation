@@ -9,7 +9,7 @@ export default class Star extends Body {
         super.onRender(context, properties);
     }
 
-    onUpdate(timeStep, totalElapsedTime) {
-        super.onUpdate(timeStep, totalElapsedTime);
+    onUpdate(timeStep, properties) {
+        super.onUpdate(timeStep, properties);
     }
 }

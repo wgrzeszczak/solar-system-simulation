@@ -1,17 +1,13 @@
 import Body from './body';
 import Vector2D from "../math/vector";
-import Constants from "../math/constants";
 
 export default class OrbitingBody extends Body {
     constructor(label, image, imageCanvas, mass, radius, position, velocity, rotation, angularVelocity, parent, orbitalParameters) {
         super(label, image, imageCanvas, mass, radius, position, velocity, rotation, angularVelocity, parent);
         this.orbitalParameters = orbitalParameters;
         
-        this.orbitPrediction = this.calculateOrbitPrediction();
+        this.orbitPrediction = [];
         this.visibleOrbitPredictionPoints = [];
-        
-        this.position = this.orbitPrediction[0];
-
         this.lastOffset = new Vector2D();
         this.lastScale = 0.0;
     }
@@ -22,11 +18,60 @@ export default class OrbitingBody extends Body {
         super.onRender(context, properties);
     }
 
-    onUpdate(timeStep, totalElapsedTime) {
-        super.onUpdate(timeStep, totalElapsedTime);
-        const stateVectors = this.getStateVectors(totalElapsedTime);
+    onUpdate(timeStep, properties) {
+        if(!this.orbitPrediction.length) {
+            this.calculateOrbitPrediction(properties);               
+            this.position = this.orbitPrediction[0];
+        }
+
+        super.onUpdate(timeStep, properties);
+        const stateVectors = this.getStateVectors(properties);
         this.position = stateVectors.position;
         this.velocity = stateVectors.velocity;
+    }
+
+    getStateVectors(properties) {
+        const e = this.orbitalParameters.eccentricity;
+        const a = this.orbitalParameters.semiMajorAxis;
+        const M = (this.orbitalParameters.meanAnomaly + 2 * Math.PI * properties.totalElapsedTime / this.orbitalParameters.period) % (2 * Math.PI);
+
+        // Eccentric anomaly
+        let E = M;
+        while (true)
+        {
+            let E_next = E - (E - e * Math.sin(E) - M) / (1.0 - e * Math.cos(E));
+            let delta = E_next - E;
+            E = E_next;
+            if(Math.abs(delta) < 1e-8) {
+                break;
+            }
+        }
+
+        // True anomaly
+        const halfE = 0.5 * E;
+        const v = 2 * Math.atan2(Math.sqrt(1.0 + e) * Math.sin(halfE), Math.sqrt(1.0 - e) * Math.cos(halfE));
+
+        // Distance to central body
+        const r = a * (1.0 - e * Math.cos(E));
+
+        // Vectors relative to orbital plane
+        const term = Math.sqrt(a * properties.G * parent.mass) / r;
+
+        return {
+            position: new Vector2D(r * Math.cos(v), -r * Math.sin(v)),
+            velocity: new Vector2D(term * - Math.sin(E), -term * Math.sqrt(1.0 - e * e) * Math.cos(E))
+        };
+    }
+
+    calculateOrbitPrediction(properties) {
+        this.orbitPrediction = [];
+        for (let timeStep = 0.0; timeStep < this.orbitalParameters.period; timeStep += this.orbitalParameters.period / 500) {
+            Object.assign(properties, {
+                totalElapsedTime: timeStep
+            });
+            const stateVectors = this.getStateVectors(properties);
+            this.orbitPrediction.push(stateVectors.position);
+        }
     }
 
     calculateVisibleOrbitPredictionPoints(properties) {      
@@ -62,59 +107,17 @@ export default class OrbitingBody extends Body {
         });
     }
 
-    getStateVectors(totalElapsedTime) {
-        const e = this.orbitalParameters.eccentricity;
-        const a = this.orbitalParameters.semiMajorAxis;
-        const M = (this.orbitalParameters.meanAnomaly + 2 * Math.PI * totalElapsedTime / this.orbitalParameters.period) % (2 * Math.PI);
-
-        // Eccentric anomaly
-        let E = M;
-        while (true)
-        {
-            let E_next = E - (E - e * Math.sin(E) - M) / (1.0 - e * Math.cos(E));
-            let delta = E_next - E;
-            E = E_next;
-            if(Math.abs(delta) < 1e-8) {
-                break;
-            }
-        }
-
-        // True anomaly
-        const halfE = 0.5 * E;
-        const v = 2 * Math.atan2(Math.sqrt(1.0 + e) * Math.sin(halfE), Math.sqrt(1.0 - e) * Math.cos(halfE));
-
-        // Distance to central body
-        const r = a * (1.0 - e * Math.cos(E));
-
-        // Vectors relative to orbital plane
-        const term = Math.sqrt(a * Constants.G * parent.mass) / r;
-
-        return {
-            position: new Vector2D(r * Math.cos(v), -r * Math.sin(v)),
-            velocity: new Vector2D(term * - Math.sin(E), -term * Math.sqrt(1.0 - e * e) * Math.cos(E))
-        };
-    }
-
-    calculateOrbitPrediction() {
-        this.orbitPrediction = [];
-        for (let time = 0.0; time < this.orbitalParameters.period; time += this.orbitalParameters.period / 500) {
-            const stateVectors = this.getStateVectors(time);
-            this.orbitPrediction.push(stateVectors.position);
-        }
-
-        return this.orbitPrediction;
-    }
-
     renderOrbitPrediction(context, properties) {
-        const parentAbsolutePosition = this.parent.getAbsolutePosition(properties);
-
         if(this.visibleOrbitPredictionPoints.length) {      
+            const parentAbsolutePosition = this.parent.getAbsolutePosition(properties);
+
             context.beginPath();
             context.strokeStyle = properties.defaultStrokeStyle;
             this.visibleOrbitPredictionPoints.forEach((visibleIndex) => {
-                if(this.visibleOrbitPredictionPoints.includes((visibleIndex + 1) % this.orbitPrediction.length)) {                   
+                const followingIndex = (visibleIndex + 1) % this.orbitPrediction.length;
+                if(this.visibleOrbitPredictionPoints.includes(followingIndex)) {                   
                     const sourcePoint = this.orbitPrediction[visibleIndex];
-                    const targetPoint = this.orbitPrediction[(visibleIndex + 1) % this.orbitPrediction.length];
+                    const targetPoint = this.orbitPrediction[followingIndex];
                     context.moveTo(
                         parentAbsolutePosition.x + sourcePoint.x * properties.scale, 
                         parentAbsolutePosition.y + sourcePoint.y * properties.scale

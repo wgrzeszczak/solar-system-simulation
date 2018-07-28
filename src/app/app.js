@@ -20,6 +20,7 @@ import SaturnImage from '../images/planets/saturn.jpg';
 import UranusImage from '../images/planets/uranus.jpg';
 import NeptuneImage from '../images/planets/neptune.jpg';
 import Constants from './math/constants';
+import BackgroundBuilder from './builders/backgroundBuilder';
 
 export default class App {
     constructor(document, view, canvas, panel) {
@@ -41,16 +42,18 @@ export default class App {
         this.renderer.onResize(this.view.innerWidth, this.view.innerHeight);
         this.renderer.onMove(new Vector2D(this.view.innerWidth / 2, this.view.innerHeight / 2));
 
-        this.objects.background = new Background(BackgroundImage, this.document.createElement('canvas'));
+        this.objects.background = new BackgroundBuilder(this.document)
+        .withImage(BackgroundImage)
+        .build();
         this.renderer.addRenderable(this.objects.background);
 
         this.objects.sun = new StarBuilder(this.document)
-            .withLabel("Sun")
-            .withImage(SunImage)
-            .withMass(1.989e30)
-            .withRadius(695700)
-            .withAngularVelocity(1)
-            .build();
+        .withLabel("Sun")
+        .withImage(SunImage)
+        .withMass(1.989e30)
+        .withRadius(695700)
+        .withAngularVelocity(-1)
+        .build();
         this.physics.addUpdateable(this.objects.sun);
         this.renderer.addRenderable(this.objects.sun);
 
@@ -59,7 +62,7 @@ export default class App {
         .withImage(MercuryImage)
         .withMass(3.3022e23)
         .withRadius(2439.7)
-        .withAngularVelocity(1)
+        .withAngularVelocity(-1)
         .withParent(this.objects.sun)
         .withOrbitalParameters({
             semiMajorAxis: 57909050,
@@ -94,7 +97,7 @@ export default class App {
         .withImage(EarthImage)
         .withMass(5.9736e24)
         .withRadius(6000)
-        .withAngularVelocity(1)
+        .withAngularVelocity(-1)
         .withParent(this.objects.sun)
         .withOrbitalParameters({
             semiMajorAxis: 149598023,
@@ -111,7 +114,7 @@ export default class App {
         .withImage(MoonImage)
         .withMass(7.349e22)
         .withRadius(1737.1)
-        .withAngularVelocity(1)
+        .withAngularVelocity(-0.00015250414)
         .withParent(this.objects.earth)
         .withOrbitalParameters({
             semiMajorAxis: 384399,
@@ -128,7 +131,7 @@ export default class App {
         .withImage(MarsImage)
         .withMass(6.4185e23)
         .withRadius(1794)
-        .withAngularVelocity(1)
+        .withAngularVelocity(-1)
         .withParent(this.objects.sun)
         .withOrbitalParameters({
             semiMajorAxis: 227939200,
@@ -145,7 +148,7 @@ export default class App {
         .withImage(JupiterImage)
         .withMass(1.8982e27)
         .withRadius(69911)
-        .withAngularVelocity(1)
+        .withAngularVelocity(-1)
         .withParent(this.objects.sun)
         .withOrbitalParameters({
             semiMajorAxis: 778.57e6,
@@ -162,7 +165,7 @@ export default class App {
         .withImage(SaturnImage)
         .withMass(5.6834e26)
         .withRadius(58232)
-        .withAngularVelocity(1)
+        .withAngularVelocity(-1)
         .withParent(this.objects.sun)
         .withOrbitalParameters({
             semiMajorAxis: 1433.53e6,
@@ -196,7 +199,7 @@ export default class App {
         .withImage(NeptuneImage)
         .withMass(1.0243e26)
         .withRadius(24622)
-        .withAngularVelocity(1)
+        .withAngularVelocity(-1)
         .withParent(this.objects.sun)
         .withOrbitalParameters({
             semiMajorAxis: 30.11 * Constants.AU,

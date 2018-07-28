@@ -4,6 +4,7 @@ export default class Background {
         this.image.src = image;
         this.imageCanvas = imageCanvas;
         this.imageCanvasContext = this.imageCanvas.getContext('2d');
+
         this.image.addEventListener('load', () => {
             this.imageCanvas.width = this.image.width;
             this.imageCanvas.height = this.image.height;
@@ -12,7 +13,6 @@ export default class Background {
     }
 
     onRender(context, properties) {
-        context.clearRect(0, 0, properties.viewWidth, properties.viewHeight);
         context.drawImage(this.imageCanvas, 0, 0, properties.viewWidth, properties.viewHeight);
     }
 }

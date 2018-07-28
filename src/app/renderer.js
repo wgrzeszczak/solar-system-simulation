@@ -20,6 +20,7 @@ export default class Renderer {
         this.defaultFillStyle = 'white';
         this.defaultStrokeStyle = 'white';
         this.defaultFontStyle = '18px Calibri';
+        
         this.renderables = [];
     }
 
@@ -52,9 +53,7 @@ export default class Renderer {
         const currentPosition = new Vector2D(mousePosition.x / this.scale - this.offset.x, mousePosition.y / this.scale - this.offset.y);
         this.scale = Math.min(this.minScroll, Math.max(this.maxScroll, this.scrollStep * this.scale * direction + this.scale));
         const newPosition = new Vector2D(mousePosition.x / this.scale - this.offset.x, mousePosition.y / this.scale - this.offset.y);
-        
-        const displacement = newPosition.subtract(currentPosition);
-        this.offset = this.offset.add(displacement);
+        this.offset = this.offset.add(newPosition.subtract(currentPosition));
     }
 
     onMove(offset) {

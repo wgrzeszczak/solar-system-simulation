@@ -29,7 +29,7 @@ export default class Body {
         }
     }
 
-    onUpdate(timeStep, totalElapsedTime) {
+    onUpdate(timeStep, properties) {
         this.position = new Vector2D(this.position.x + this.velocity.x * timeStep, this.position.y + this.velocity.y * timeStep);
         this.rotation = (this.rotation + this.angularVelocity * timeStep) % 360;
     }
