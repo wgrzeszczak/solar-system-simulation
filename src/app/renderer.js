@@ -20,6 +20,7 @@ export default class Renderer {
         this.defaultFillStyle = 'white';
         this.defaultStrokeStyle = 'white';
         this.defaultFontStyle = '18px Calibri';
+        this.objectColor = '#f78300';
         
         this.renderables = [];
     }
@@ -36,7 +37,8 @@ export default class Renderer {
             offset: this.offset,
             defaultFillStyle: this.defaultFillStyle,
             defaultStrokeStyle: this.defaultStrokeStyle,
-            defaultFontStyle: this.defaultFontStyle
+            defaultFontStyle: this.defaultFontStyle,
+            objectColor: this.objectColor
         };
 
         this.renderables.forEach((renderable) => {

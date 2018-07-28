@@ -61,8 +61,8 @@ export default class Body {
     renderArc(context, properties) {
         const absolutePosition = this.getAbsolutePosition(properties);
         context.beginPath();
-        context.fillStyle = properties.defaultFillStyle;
-        context.strokeStyle = properties.defaultStrokeStyle;
+        context.fillStyle = properties.objectColor;
+        context.strokeStyle = properties.objectColor;
         context.arc(
             absolutePosition.x,
             absolutePosition.y,

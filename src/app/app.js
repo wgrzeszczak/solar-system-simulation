@@ -15,10 +15,10 @@ import VenusImage from '../images/planets/venus.png';
 import EarthImage from '../images/planets/earth.png';
 import MoonImage from '../images/planets/moon.png';
 import MarsImage from '../images/planets/mars.png';
-import JupiterImage from '../images/planets/jupiter.jpg';
-import SaturnImage from '../images/planets/saturn.jpg';
-import UranusImage from '../images/planets/uranus.jpg';
-import NeptuneImage from '../images/planets/neptune.jpg';
+import JupiterImage from '../images/planets/jupiter.png';
+import SaturnImage from '../images/planets/saturn.png';
+import UranusImage from '../images/planets/uranus.png';
+import NeptuneImage from '../images/planets/neptune.png';
 import Constants from './math/constants';
 import BackgroundBuilder from './builders/backgroundBuilder';
 
