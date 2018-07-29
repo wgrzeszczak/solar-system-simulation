@@ -1,5 +1,5 @@
 # solar-system-simulation
-Simulation of the solar system based on Kepler's equation. Simulation should be realistic but will degrade with passing time.
+Simulation of the solar system based on Kepler's equation. Simulation should be realistic but will degrade as time passes.
 
 ![Demo](https://wgrzeszczak.github.io/solar/demo.png)
 ![Demo 2](https://wgrzeszczak.github.io/solar/demo2.png)
