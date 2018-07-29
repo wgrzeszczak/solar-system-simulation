@@ -1,6 +1,6 @@
 export default class Physics {
     constructor() {
-        this.totalElapsedTime = Math.round(new Date().getTime() / 1000);
+        this.totalElapsedTime = Math.round(new Date().getTime());
         
         this.simulationSpeed = 1;
         this.G = 6.67408e-11;

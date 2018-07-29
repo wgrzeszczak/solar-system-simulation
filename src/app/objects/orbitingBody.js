@@ -19,57 +19,69 @@ export default class OrbitingBody extends Body {
     }
 
     onUpdate(timeStep, properties) {
-        if(!this.orbitPrediction.length) {
-            this.calculateOrbitPrediction(properties);               
-            this.position = this.orbitPrediction[0];
-        }
-
         super.onUpdate(timeStep, properties);
+        this.calculateOrbitPrediction(properties);
         const stateVectors = this.getStateVectors(properties);
         this.position = stateVectors.position;
-        this.velocity = stateVectors.velocity;
+    }
+
+    getJulianDay(date) {
+        return date.getTime() / 86400000 + 2440587.5 - 2451543.5; //julian day from 1970 + days to 1970 - days to epoch J2000
     }
 
     getStateVectors(properties) {
-        const e = this.orbitalParameters.eccentricity; // <0, 1)
-        const a = this.orbitalParameters.semiMajorAxis * 1000.0; // in meters
-        const M = (this.orbitalParameters.meanAnomaly * Math.PI / 180 + 2 * Math.PI * properties.totalElapsedTime / this.orbitalParameters.period) % (2 * Math.PI); // in radians
+        const date = new Date(properties.totalElapsedTime);
+        const day = this.getJulianDay(date);
+        const T = day / 36525;
 
-        // Eccentric anomaly
-        let E = M;
-        while (true)
-        {
-            let E_next = E - (E - e * Math.sin(E) - M) / (1.0 - e * Math.cos(E));
-            let delta = E_next - E;
-            E = E_next;
-            if(Math.abs(delta) < 1e-6) {
+        let a = this.orbitalParameters.a0 + this.orbitalParameters.ac * T;
+        let e = this.orbitalParameters.e0 + this.orbitalParameters.ec * T;
+        let I = this.orbitalParameters.I0 + this.orbitalParameters.Ic * T;
+        let L = this.orbitalParameters.L0 + this.orbitalParameters.Lc * T;
+        let Lp = this.orbitalParameters.Lp0 + this.orbitalParameters.Lpc * T;
+        let o = this.orbitalParameters.o0 + this.orbitalParameters.oc * T;
+
+        const M = (((L - Lp) % 360) + 180) % 360 * Math.PI / 180;
+        const wp = (Lp - o) * Math.PI / 180;
+        
+        I = I * Math.PI / 180;
+        L = L * Math.PI / 180;
+        Lp = Lp * Math.PI / 180;
+        o = o * Math.PI / 180;
+
+        let E = M;      
+        while(true) {
+            const ENext = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+            const dE = E - ENext;
+            E = ENext;
+            if(Math.abs(dE) < 10e-6) {
                 break;
             }
         }
+        
+        const xp = a * (Math.cos(E) - e);
+        const yp = a * Math.sqrt(1 - Math.pow(e, 2)) * Math.sin(E);
 
-        // True anomaly
-        const halfE = 0.5 * E;
-        const v = 2 * Math.atan2(Math.sqrt(1.0 + e) * Math.sin(halfE), Math.sqrt(1.0 - e) * Math.cos(halfE));
-
-        // Distance to central body
-        const r = a * (1.0 - e * Math.cos(E));
-
-        // Vectors relative to orbital plane
-        const term = Math.sqrt(a * properties.G * parent.mass) / r;
+        const x = xp * (Math.cos(wp) * Math.cos(o) - Math.sin(wp) * Math.sin(o) * Math.cos(I)) + yp * (-Math.sin(wp) * Math.cos(o) - Math.cos(wp) * Math.sin(o) * Math.cos(I));
+        const y = xp * (Math.cos(wp) * Math.sin(o) + Math.sin(wp) * Math.cos(o) * Math.cos(I)) + yp * (-Math.sin(wp) * Math.sin(o) + Math.cos(wp) * Math.cos(o) * Math.cos(I));
 
         return {
-            position: new Vector2D(r * Math.cos(v), -r * Math.sin(v)),
-            velocity: new Vector2D(term * - Math.sin(E), -term * Math.sqrt(1.0 - e * e) * Math.cos(E))
+            position: new Vector2D(-x, y),
         };
     }
 
     calculateOrbitPrediction(properties) {
         this.orbitPrediction = [];
-        for (let timeStep = 0.0; timeStep < this.orbitalParameters.period; timeStep += this.orbitalParameters.period / 500) {
-            Object.assign(properties, {
-                totalElapsedTime: timeStep
+        const date = new Date(properties.totalElapsedTime);
+        const day = this.getJulianDay(date);
+        const T = day / 36525;
+        const a = this.orbitalParameters.a0 + this.orbitalParameters.ac * T;
+        const period = 2 * Math.PI * Math.sqrt(Math.pow(a, 3) / (properties.G * this.parent.mass)) * 1000; // in ms
+
+        for (let timeStep = 0.0; timeStep < period; timeStep += period / 500) {
+            const stateVectors = this.getStateVectors({
+                totalElapsedTime: properties.totalElapsedTime + timeStep
             });
-            const stateVectors = this.getStateVectors(properties);
             this.orbitPrediction.push(stateVectors.position);
         }
     }

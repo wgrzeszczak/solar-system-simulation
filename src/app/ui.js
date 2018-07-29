@@ -1,6 +1,6 @@
 import Vector2D from "./math/vector";
 
-export default class Controller {
+export default class UI {
     constructor(view, canvas, panel, renderer, physics) {
         this.view = view;
         this.canvas = canvas;
@@ -85,5 +85,16 @@ export default class Controller {
             this.physics.onSimulationSpeedChanged(0);
             this.simulationSpeedValue.textContent = `Current simulation speed: Paused`;
         }
+    }
+
+    update() {
+        const currentDate = new Date(this.physics.totalElapsedTime);
+        const options = { 
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric' 
+        };
+        this.simulationStarDate.textContent = `Current date: ${currentDate.toLocaleDateString("en-US", options)}`;
     }
 }

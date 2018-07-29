@@ -1,3 +1,3 @@
 export default {
-    AU: 1.496e8
+    AU: 1.496e11
 };

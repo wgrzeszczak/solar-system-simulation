@@ -8,11 +8,11 @@ export default class Renderer {
 
         this.scrollStep = 0.2;
         this.minScroll = 1e-1,
-        this.maxScroll = 1e-10;
+        this.maxScroll = 1e-12;
 
         this.width = 0;
         this.height = 0;
-        this.scale = 1e-6;
+        this.scale = 1e-9;
         this.moveStep = 1.0;
 
         this.offset = new Vector2D();
