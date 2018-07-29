@@ -7,7 +7,6 @@ import Vector2D from './math/vector';
 import StarBuilder from './builders/starBuilder';
 import OrbitingBodyBuilder from './builders/orbitingBodyBuilder';
 
-import Background from './objects/background';
 import BackgroundImage from '../images/backgrounds/default.jpg';
 import SunImage from '../images/planets/sun.png';
 import MercuryImage from '../images/planets/mercury.png';
@@ -214,7 +213,6 @@ export default class App {
 
     update(timeStep) {
         this.physics.update(timeStep);
-        this.controller.update();
     }
 
     render() {

@@ -1,5 +1,5 @@
 # solar-system-simulation
-Simulation of the solar system based on Kepler's equation.
+Simulation of the solar system based on Kepler's equation and precomputed mean anomaly.
 
 ![Demo](https://wgrzeszczak.github.io/solar/demo.png)
 ![Demo 2](https://wgrzeszczak.github.io/solar/demo2.png)

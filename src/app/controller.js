@@ -86,15 +86,4 @@ export default class Controller {
             this.simulationSpeedValue.textContent = `Current simulation speed: Paused`;
         }
     }
-
-    update() {
-        const currentDate = new Date(this.physics.totalElapsedTime * 1000);
-        const options = { 
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric' 
-        };
-        this.simulationStarDate.textContent = `Current date: ${currentDate.toLocaleDateString("en-US", options)}`;
-    }
 }

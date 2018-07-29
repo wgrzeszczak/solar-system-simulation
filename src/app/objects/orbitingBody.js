@@ -31,9 +31,9 @@ export default class OrbitingBody extends Body {
     }
 
     getStateVectors(properties) {
-        const e = this.orbitalParameters.eccentricity;
-        const a = this.orbitalParameters.semiMajorAxis;
-        const M = (this.orbitalParameters.meanAnomaly + 2 * Math.PI * properties.totalElapsedTime / this.orbitalParameters.period) % (2 * Math.PI);
+        const e = this.orbitalParameters.eccentricity; // <0, 1)
+        const a = this.orbitalParameters.semiMajorAxis * 1000.0; // in meters
+        const M = (this.orbitalParameters.meanAnomaly * Math.PI / 180 + 2 * Math.PI * properties.totalElapsedTime / this.orbitalParameters.period) % (2 * Math.PI); // in radians
 
         // Eccentric anomaly
         let E = M;
@@ -42,7 +42,7 @@ export default class OrbitingBody extends Body {
             let E_next = E - (E - e * Math.sin(E) - M) / (1.0 - e * Math.cos(E));
             let delta = E_next - E;
             E = E_next;
-            if(Math.abs(delta) < 1e-8) {
+            if(Math.abs(delta) < 1e-6) {
                 break;
             }
         }
