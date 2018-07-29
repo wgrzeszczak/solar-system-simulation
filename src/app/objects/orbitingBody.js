@@ -91,37 +91,26 @@ export default class OrbitingBody extends Body {
         const minBounds = new Vector2D();
         const maxBounds = new Vector2D(properties.viewWidth, properties.viewHeight);
         const parentAbsolutePosition = this.parent.getAbsolutePosition(properties);
-        let foundFirstOutOfBoundsPoint = false;
-        let lastOutOfBoundsPointIndex = null;
-
+        
         this.visibleOrbitPredictionPoints = [];
         this.orbitPrediction.forEach((point, index) => {
             point = point.multiply(properties.scale).add(parentAbsolutePosition);
             if(point.x >= minBounds.x && point.x <= maxBounds.x && point.y >= minBounds.y && point.y <= maxBounds.y) {
-                this.visibleOrbitPredictionPoints.push(index);
-
-                if(index + 1 == this.orbitPrediction.length) {
-                    this.visibleOrbitPredictionPoints.push(0);
-                } 
-                else if(lastOutOfBoundsPointIndex) {
-                    this.visibleOrbitPredictionPoints.push(lastOutOfBoundsPointIndex);
+                const prev = (index - 1 + this.orbitPrediction.length) % this.orbitPrediction.length;
+                const next = (index + 1 + this.orbitPrediction.length) % this.orbitPrediction.length;
+                if(!this.visibleOrbitPredictionPoints.includes(index)) {
+                    this.visibleOrbitPredictionPoints.push(index);
                 }
 
-                foundFirstOutOfBoundsPoint = false;
-                lastOutOfBoundsPointIndex = null;
-            }
-            else if(!foundFirstOutOfBoundsPoint && this.visibleOrbitPredictionPoints.length) {
-                foundFirstOutOfBoundsPoint = true;
-                this.visibleOrbitPredictionPoints.push(index);
-            }
-            else {
-                lastOutOfBoundsPointIndex = index;
+                if(!this.visibleOrbitPredictionPoints.includes(prev)) {
+                    this.visibleOrbitPredictionPoints.push(prev);
+                }
+
+                if(!this.visibleOrbitPredictionPoints.includes(next)) {
+                    this.visibleOrbitPredictionPoints.push(next);
+                }
             }
         });
-
-        if(lastOutOfBoundsPointIndex) {
-            this.visibleOrbitPredictionPoints.push(lastOutOfBoundsPointIndex);
-        }
     }
 
     renderOrbitPrediction(context, properties) {
