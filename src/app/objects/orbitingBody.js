@@ -77,8 +77,9 @@ export default class OrbitingBody extends Body {
         const T = day / 36525;
         const a = this.orbitalParameters.a0 + this.orbitalParameters.ac * T;
         const period = 2 * Math.PI * Math.sqrt(Math.pow(a, 3) / (properties.G * this.parent.mass)) * 1000; // in ms
+        const periodStep = period / 500;
 
-        for (let timeStep = 0.0; timeStep < period; timeStep += period / 500) {
+        for (let timeStep = 0.0; timeStep < period - periodStep; timeStep += periodStep) {
             const stateVectors = this.getStateVectors({
                 totalElapsedTime: properties.totalElapsedTime + timeStep
             });
@@ -117,6 +118,10 @@ export default class OrbitingBody extends Body {
                 lastOutOfBoundsPointIndex = index;
             }
         });
+
+        if(lastOutOfBoundsPointIndex) {
+            this.visibleOrbitPredictionPoints.push(lastOutOfBoundsPointIndex);
+        }
     }
 
     renderOrbitPrediction(context, properties) {
