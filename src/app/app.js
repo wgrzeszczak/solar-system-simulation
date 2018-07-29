@@ -268,11 +268,11 @@ export default class App {
     }
 
     run() {
-        const timeStep = 1.0 / 60.0;
+        const timeStep = 1000.0 / 60.0;
 
         setInterval(() => {
             const now = Date.now();
-            let deltaTime = (now - this.lastUpdate) / 1000.0;
+            let deltaTime = (now - this.lastUpdate);
             this.lastUpdate = now;
 
             let remainingDeltaTime = deltaTime;

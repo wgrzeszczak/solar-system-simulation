@@ -31,7 +31,7 @@ export default class Body {
 
     onUpdate(timeStep, properties) {
         this.position = new Vector2D(this.position.x + this.velocity.x * timeStep, this.position.y + this.velocity.y * timeStep);
-        this.rotation = (this.rotation + this.angularVelocity * timeStep) % 360;
+        this.rotation = (this.rotation + this.angularVelocity * timeStep / 1000) % 360;
     }
 
     isBodyVisible(properties) {
@@ -79,10 +79,10 @@ export default class Body {
         this.imageCanvasContext.save();
         this.imageCanvasContext.translate(this.imageCanvas.width / 2, this.imageCanvas.height / 2);
         this.imageCanvasContext.rotate(this.rotation * Math.PI / 180);
-        this.imageCanvasContext.drawImage(this.image, Math.floor(-this.imageCanvas.width / 2), Math.floor(-this.imageCanvas.height / 2));
+        this.imageCanvasContext.drawImage(this.image, -this.imageCanvas.width / 2, -this.imageCanvas.height / 2);
         this.imageCanvasContext.restore();
 
-        const scaledRadius = Math.floor(this.radius * properties.scale);
+        const scaledRadius = this.radius * properties.scale;
         context.drawImage(
             this.imageCanvas,
             absolutePosition.x - scaledRadius,

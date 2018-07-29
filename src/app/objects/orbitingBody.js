@@ -33,7 +33,6 @@ export default class OrbitingBody extends Body {
         const date = new Date(properties.totalElapsedTime);
         const day = this.getJulianDay(date);
         const T = day / 36525;
-
         let a = this.orbitalParameters.a0 + this.orbitalParameters.ac * T;
         let e = this.orbitalParameters.e0 + this.orbitalParameters.ec * T;
         let I = this.orbitalParameters.I0 + this.orbitalParameters.Ic * T;

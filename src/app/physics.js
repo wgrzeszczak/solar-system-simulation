@@ -14,7 +14,7 @@ export default class Physics {
 
     update(timeStep) {
         timeStep *= this.simulationSpeed;
-        this.totalElapsedTime +=  timeStep;
+        this.totalElapsedTime += timeStep;
 
         const properties = {
             totalElapsedTime: this.totalElapsedTime,

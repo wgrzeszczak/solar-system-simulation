@@ -76,8 +76,8 @@ export default class UI {
     setSimulationSpeed() {
         const simulationSpeedSelectorValue = this.simulationSpeedSelector.value;
         if(simulationSpeedSelectorValue != 0) {
-            const direction = Math.abs(this.simulationSpeedSelector.value) / this.simulationSpeedSelector.value;
-            const simulationSpeed = direction * Math.pow(10, Math.abs(this.simulationSpeedSelector.value - 1 * direction));
+            const direction = Math.abs(simulationSpeedSelectorValue) / simulationSpeedSelectorValue;
+            const simulationSpeed = direction * Math.pow(10, Math.abs(simulationSpeedSelectorValue - 1 * direction));
             this.physics.onSimulationSpeedChanged(simulationSpeed);
             this.simulationSpeedValue.textContent = `Current simulation speed: ${direction + " * 10^" + Math.abs(this.simulationSpeedSelector.value - 1 * direction)}`;
         }
