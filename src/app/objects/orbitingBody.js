@@ -41,8 +41,8 @@ export default class OrbitingBody extends Body {
         let Lp = this.orbitalParameters.Lp0 + this.orbitalParameters.Lpc * T;
         let o = this.orbitalParameters.o0 + this.orbitalParameters.oc * T;
 
-        const M = (((L - Lp) % 360) + 180) % 360 * Math.PI / 180;
-        const wp = (Lp - o) * Math.PI / 180;
+        let M = ((L - Lp) % 360) * Math.PI / 180;
+        let wp = (Lp - o) * Math.PI / 180;
         
         I = I * Math.PI / 180;
         L = L * Math.PI / 180;
@@ -59,6 +59,14 @@ export default class OrbitingBody extends Body {
             }
         }
         
+        M %= (2 * Math.PI);
+        M %= (2 * Math.PI);
+        I %= (2 * Math.PI);
+        L %= (2 * Math.PI);
+        Lp %= (2 * Math.PI);
+        M %= (2 * Math.PI);
+        wp %= (2 * Math.PI);
+
         const xp = a * (Math.cos(E) - e);
         const yp = a * Math.sqrt(1 - Math.pow(e, 2)) * Math.sin(E);
 
@@ -66,7 +74,7 @@ export default class OrbitingBody extends Body {
         const y = xp * (Math.cos(wp) * Math.sin(o) + Math.sin(wp) * Math.cos(o) * Math.cos(I)) + yp * (-Math.sin(wp) * Math.sin(o) + Math.cos(wp) * Math.cos(o) * Math.cos(I));
 
         return {
-            position: new Vector2D(-x, y),
+            position: new Vector2D(x, -y),
         };
     }
 
