@@ -13,6 +13,7 @@ export default class Background {
     }
 
     onRender(context, properties) {
+        context.clearRect(0, 0, properties.viewWidth, properties.viewHeight);
         context.drawImage(this.imageCanvas, 0, 0, properties.viewWidth, properties.viewHeight);
     }
 }
