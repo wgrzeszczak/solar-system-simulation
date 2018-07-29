@@ -58,14 +58,6 @@ export default class OrbitingBody extends Body {
                 break;
             }
         }
-        
-        M %= (2 * Math.PI);
-        M %= (2 * Math.PI);
-        I %= (2 * Math.PI);
-        L %= (2 * Math.PI);
-        Lp %= (2 * Math.PI);
-        M %= (2 * Math.PI);
-        wp %= (2 * Math.PI);
 
         const xp = a * (Math.cos(E) - e);
         const yp = a * Math.sqrt(1 - Math.pow(e, 2)) * Math.sin(E);
