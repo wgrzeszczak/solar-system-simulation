@@ -75,6 +75,11 @@ export default class Body {
 
     renderImage(context, properties) {
         const absolutePosition = this.getAbsolutePosition(properties);
+        const scaledRadius = this.radius * properties.scale;
+
+        if(scaledRadius < 1.0) {
+            return;
+        }
 
         this.imageCanvasContext.save();
         this.imageCanvasContext.translate(this.imageCanvas.width / 2, this.imageCanvas.height / 2);
@@ -82,13 +87,16 @@ export default class Body {
         this.imageCanvasContext.drawImage(this.image, -this.imageCanvas.width / 2, -this.imageCanvas.height / 2);
         this.imageCanvasContext.restore();
 
-        const scaledRadius = this.radius * properties.scale;
         context.drawImage(
             this.imageCanvas,
+            0,
+            0,
+            this.imageCanvas.width,
+            this.imageCanvas.height,
             absolutePosition.x - scaledRadius,
             absolutePosition.y - scaledRadius,
             2 * scaledRadius,
-            2 * scaledRadius
+            2 * scaledRadius,
         );
     }
 

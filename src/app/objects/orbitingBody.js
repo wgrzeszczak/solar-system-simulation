@@ -120,6 +120,7 @@ export default class OrbitingBody extends Body {
             context.strokeStyle = properties.defaultStrokeStyle;
             this.visibleOrbitPredictionPoints.forEach((visibleIndex) => {
                 const followingIndex = (visibleIndex + 1) % this.orbitPrediction.length;
+                
                 if(this.visibleOrbitPredictionPoints.includes(followingIndex)) {                   
                     const sourcePoint = this.orbitPrediction[visibleIndex];
                     const targetPoint = this.orbitPrediction[followingIndex];
