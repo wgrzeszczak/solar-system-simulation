@@ -14,3 +14,12 @@
     background-image: url("github.png");
     background-size: cover;
 }
+
+.links .link.github:hover:before {
+    position: absolute;
+    display: block;
+    right: 0;
+    width: 175px;
+    content: 'View source on GitHub';
+    color: #ffffff;
+}
