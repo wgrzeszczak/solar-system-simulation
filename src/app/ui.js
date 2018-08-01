@@ -87,7 +87,7 @@ export default class UI {
         }
     }
 
-    update() {
+    updateUI() {
         const currentDate = new Date(this.physics.totalElapsedTime);
         const options = { 
             weekday: 'long',

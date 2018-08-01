@@ -259,27 +259,20 @@ export default class App {
 
     update(timeStep) {
         this.physics.update(timeStep);
-        this.ui.update();
     }
 
     render() {
         this.renderer.render();
         this.view.requestAnimationFrame(() => this.render());
+        this.ui.updateUI()
     }
 
     run() {
-        const timeStep = 1000.0 / 60.0;
-
         setInterval(() => {
             const now = Date.now();
             let deltaTime = (now - this.lastUpdate);
             this.lastUpdate = now;
-
-            let remainingDeltaTime = deltaTime;
-            while(remainingDeltaTime > 0.0) {
-                this.update(Math.min(timeStep, remainingDeltaTime));
-                remainingDeltaTime -= timeStep;
-            }
+            this.update(deltaTime);
         }, 1000.0 / 60.0);
 
         this.view.requestAnimationFrame(() => this.render());
