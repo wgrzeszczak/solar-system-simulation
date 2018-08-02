@@ -20,6 +20,7 @@
     display: block;
     right: 0;
     width: 175px;
+    line-height: 16px;
     content: 'View source on GitHub';
     color: #ffffff;
 }
