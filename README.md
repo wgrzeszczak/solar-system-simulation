@@ -8,6 +8,8 @@ Simulation of the solar system based on Kepler's equation. Simulation should be 
 ### Live demo
 Live demo: https://wgrzeszczak.github.io/solar/
 
+Use the right mouse button to move around the solar system and mouse wheel to zoom in or out.
+
 ### License
 ```
 MIT License
